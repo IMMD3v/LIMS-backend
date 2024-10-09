@@ -26,6 +26,8 @@ public class ContainerService {
                     containerDTO.setName(container.getName());
                     containerDTO.setCapacity(container.getCapacity());
                     containerDTO.setLiquidType(container.getLiquidType());
+                    containerDTO.setMaterial(container.getMaterial());
+                    containerDTO.setInUse(container.isInUse());
                     return containerDTO;
                 })
                 .collect(Collectors.toList());
@@ -38,6 +40,8 @@ public class ContainerService {
         //assign new values
         newContainer.setName(containerDTO.getName());
         newContainer.setCapacity(containerDTO.getCapacity());
+        newContainer.setMaterial(containerDTO.getMaterial());
+        newContainer.setInUse(false);
         //save repository
         containerRepository.save(newContainer);
         //return response
@@ -57,6 +61,8 @@ public class ContainerService {
         updatingContainer.setCapacity(containerDTO.getCapacity());
         updatingContainer.setName(containerDTO.getName());
         updatingContainer.setLiquidType(containerDTO.getLiquidType());
+        updatingContainer.setMaterial(containerDTO.getMaterial());
+        //updatingContainer.setInUse(containerDTO.isInUse()); do not update this, not mutable in real case
 
         containerRepository.save(updatingContainer);
 
@@ -66,6 +72,7 @@ public class ContainerService {
         responseDTO.setName(updatingContainer.getName());
         responseDTO.setCapacity(updatingContainer.getCapacity());
         responseDTO.setLiquidType(updatingContainer.getLiquidType());
+        responseDTO.setMaterial(updatingContainer.getMaterial());
         return responseDTO;
     }
 
@@ -82,6 +89,8 @@ public class ContainerService {
         responseDTO.setName(requestedContainer.getName());
         responseDTO.setCapacity(requestedContainer.getCapacity());
         responseDTO.setLiquidType(requestedContainer.getLiquidType());
+        responseDTO.setMaterial(requestedContainer.getMaterial());
+        responseDTO.setInUse(requestedContainer.isInUse());
 
         return responseDTO;
     }

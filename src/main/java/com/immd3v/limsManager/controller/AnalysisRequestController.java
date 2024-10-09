@@ -22,8 +22,11 @@ public class AnalysisRequestController {
     public String createOne(@RequestBody AnalysisRequestDTO analysisRequestDTO) {
         return analysisRequestService.createOne(analysisRequestDTO);
     }
-    @PutMapping("/deleteById/{id}")
-    public String deleteRequest(int id) {
+    @PutMapping("/delete/{id}")
+    public String deleteRequest(@PathVariable int id) {
         return analysisRequestService.deleteRequest(id);
     }
+
+    @GetMapping("/details/{id}")
+    public AnalysisRequestDTO details(@PathVariable int id) { return analysisRequestService.getOneById(id);}
 }
