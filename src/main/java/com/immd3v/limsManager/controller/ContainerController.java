@@ -19,6 +19,10 @@ public class ContainerController {
     public List<ContainerDTO> findAll() {
         return containerService.getContainers();
     }
+    @GetMapping("/listAllEmpty")
+    public List<ContainerDTO> findAllEmpty() {
+        return containerService.getEmptyContainers();
+    }
 
     @PostMapping("/create")
     public String createOne(@RequestBody ContainerDTO container) {

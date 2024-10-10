@@ -34,6 +34,24 @@ public class ContainerService {
         return response;
     }
 
+    public List<ContainerDTO> getEmptyContainers() {
+        //return the list of all
+        List<Container> emptyContainerList = containerRepository.findByInUseFalse();
+        List<ContainerDTO> response = emptyContainerList.stream()
+                .map(container -> {
+                    ContainerDTO containerDTO = new ContainerDTO();
+                    containerDTO.setId(container.getId());
+                    containerDTO.setName(container.getName());
+                    containerDTO.setCapacity(container.getCapacity());
+                    containerDTO.setLiquidType(container.getLiquidType());
+                    containerDTO.setMaterial(container.getMaterial());
+                    containerDTO.setInUse(container.isInUse());
+                    return containerDTO;
+                })
+                .collect(Collectors.toList());
+        return response;
+    }
+
     public String saveNewContainer(ContainerDTO containerDTO) {
         //create new instance
         Container newContainer = new Container();
