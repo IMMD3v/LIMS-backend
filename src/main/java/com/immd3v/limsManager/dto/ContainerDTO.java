@@ -4,14 +4,22 @@ public class ContainerDTO {
     private int id;
     private String name;
     private Double capacity;
+    private Double usedCapacity;
     private String liquidType;
     private String material;
     private boolean inUse;
 
     public ContainerDTO() {}
-    public ContainerDTO(String name, Double capacity, String liquidType, String material, boolean inUse) {
+    public ContainerDTO(
+            String name,
+            Double capacity,
+            Double usedCapacity,
+            String liquidType,
+            String material,
+            boolean inUse) {
         this.name = name;
         this.capacity = capacity;
+        this.usedCapacity = usedCapacity;
         this.liquidType = liquidType;
         this.material = material;
         this.inUse = inUse;
@@ -23,6 +31,8 @@ public class ContainerDTO {
     public void setName(String name) { this.name = name;}
     public Double getCapacity() { return this.capacity;}
     public void setCapacity(Double capacity) { this.capacity = capacity;}
+    public void setUsedCapacity(Double usedCapacity) { this.usedCapacity = usedCapacity;}
+    public Double getUsedCapacity() { return this.usedCapacity;}
     public String getLiquidType() { return this.liquidType;}
     public void setLiquidType(String liquidType) { this.liquidType = liquidType;}
     public boolean isInUse() { return this.inUse;}

@@ -10,6 +10,7 @@ public class Container {
     private int id;
     private String name;
     private Double capacity;
+    private Double usedCapacity;
     private String liquidType;
     private boolean inUse;
     private String material;
@@ -17,9 +18,17 @@ public class Container {
 
     //constructors
     public Container () {}
-    public Container (String name, Double capacity, String liquidType, boolean inUse, String material) {
+    public Container (
+            String name,
+            Double capacity,
+            Double usedCapacity,
+            String liquidType,
+            boolean inUse,
+            String material
+    ) {
         this.name = name;
         this.capacity = capacity;
+        this.usedCapacity = usedCapacity;
         this.liquidType = liquidType;
         this.inUse = inUse;
         this.material = material;
@@ -31,6 +40,8 @@ public class Container {
     public void setName(String name) { this.name = name;}
     public Double getCapacity() { return this.capacity;}
     public void setCapacity(Double capacity) { this.capacity = capacity;}
+    public Double getUsedCapacity() { return this.usedCapacity;}
+    public void setUsedCapacity(Double usedCapacity) { this.usedCapacity = usedCapacity;}
     public String getLiquidType() { return this.liquidType;}
     public void setLiquidType(String liquidType) { this.liquidType = liquidType;}
     public boolean isInUse() { return this.inUse;}

@@ -25,6 +25,7 @@ public class ContainerService {
                     containerDTO.setId(container.getId());
                     containerDTO.setName(container.getName());
                     containerDTO.setCapacity(container.getCapacity());
+                    containerDTO.setUsedCapacity(container.getUsedCapacity());
                     containerDTO.setLiquidType(container.getLiquidType());
                     containerDTO.setMaterial(container.getMaterial());
                     containerDTO.setInUse(container.isInUse());
@@ -43,6 +44,7 @@ public class ContainerService {
                     containerDTO.setId(container.getId());
                     containerDTO.setName(container.getName());
                     containerDTO.setCapacity(container.getCapacity());
+                    containerDTO.setUsedCapacity(container.getUsedCapacity());
                     containerDTO.setLiquidType(container.getLiquidType());
                     containerDTO.setMaterial(container.getMaterial());
                     containerDTO.setInUse(container.isInUse());
@@ -60,6 +62,7 @@ public class ContainerService {
         newContainer.setCapacity(containerDTO.getCapacity());
         newContainer.setMaterial(containerDTO.getMaterial());
         newContainer.setInUse(false);
+        newContainer.setUsedCapacity(0.00);
         //save repository
         containerRepository.save(newContainer);
         //return response
@@ -77,6 +80,7 @@ public class ContainerService {
         Container updatingContainer = existingContainer.get();
 
         updatingContainer.setCapacity(containerDTO.getCapacity());
+        updatingContainer.setUsedCapacity(containerDTO.getUsedCapacity());
         updatingContainer.setName(containerDTO.getName());
         updatingContainer.setLiquidType(containerDTO.getLiquidType());
         updatingContainer.setMaterial(containerDTO.getMaterial());
@@ -106,6 +110,7 @@ public class ContainerService {
         responseDTO.setId(requestedContainer.getId());
         responseDTO.setName(requestedContainer.getName());
         responseDTO.setCapacity(requestedContainer.getCapacity());
+        responseDTO.setUsedCapacity(requestedContainer.getUsedCapacity());
         responseDTO.setLiquidType(requestedContainer.getLiquidType());
         responseDTO.setMaterial(requestedContainer.getMaterial());
         responseDTO.setInUse(requestedContainer.isInUse());
