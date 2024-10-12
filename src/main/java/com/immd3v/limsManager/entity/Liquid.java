@@ -10,14 +10,20 @@ public class Liquid {
     private int id;
     private String description;
     private String origin;
-    private Double volume;
+    private Double actualVolume;
+    private Double originalVolume;
     private String batch;
 
     public Liquid() {}
-    public Liquid(String description, String origin, Double volume, String batch) {
+    public Liquid(
+            String description,
+            String origin,
+            Double originalVolume,
+            String batch) {
         this.description = description;
         this.origin = origin;
-        this.volume = volume;
+        this.originalVolume = originalVolume;
+        this.actualVolume = originalVolume;
         this.batch = batch;
     }
 
@@ -26,8 +32,10 @@ public class Liquid {
     public void setDescription(String description) { this.description = description;}
     public String getOrigin() { return this.origin;}
     public void setOrigin(String origin) { this.origin = origin;}
-    public Double getVolume() { return this.volume;}
-    public void setVolume(Double volume) { this.volume = volume;}
+    public Double getActualVolume() { return this.actualVolume;}
+    public void setActualVolume(Double actualVolume) { this.actualVolume = actualVolume;}
+    public Double getOriginalVolume() { return this.originalVolume;}
+    public void setOriginalVolume(Double originalVolume) { this.originalVolume = originalVolume;}
     public String getBatch() { return this.batch;}
     public void setBatch(String batch) { this.batch = batch;}
 }

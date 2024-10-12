@@ -84,7 +84,8 @@ public class ContainerService {
         updatingContainer.setName(containerDTO.getName());
         updatingContainer.setLiquidType(containerDTO.getLiquidType());
         updatingContainer.setMaterial(containerDTO.getMaterial());
-        //updatingContainer.setInUse(containerDTO.isInUse()); do not update this, not mutable in real case
+        //is required in assignment cases
+        updatingContainer.setInUse(containerDTO.isInUse());
 
         containerRepository.save(updatingContainer);
 

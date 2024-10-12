@@ -27,7 +27,8 @@ public class LiquidService {
                     liquidDTO.setId(liquid.getId());
                     liquidDTO.setDescription(liquid.getDescription());
                     liquidDTO.setOrigin(liquid.getOrigin());
-                    liquidDTO.setVolume(liquid.getVolume());
+                    liquidDTO.setOriginalVolume(liquid.getOriginalVolume());
+                    liquidDTO.setActualVolume(liquid.getActualVolume());
                     liquidDTO.setBatch(liquid.getBatch());
                     return liquidDTO;
                 })
@@ -40,7 +41,8 @@ public class LiquidService {
 
         newLiquid.setDescription(liquidDTO.getDescription());
         newLiquid.setOrigin(liquidDTO.getOrigin());
-        newLiquid.setVolume(liquidDTO.getVolume());
+        newLiquid.setOriginalVolume(liquidDTO.getOriginalVolume());
+        newLiquid.setActualVolume(liquidDTO.getOriginalVolume());
         newLiquid.setBatch(liquidDTO.getBatch());
 
         liquidRepository.save(newLiquid);
@@ -75,7 +77,8 @@ public class LiquidService {
         responseDTO.setId(requestedLiquid.getId());
         responseDTO.setDescription(requestedLiquid.getDescription());
         responseDTO.setOrigin(requestedLiquid.getOrigin());
-        responseDTO.setVolume(requestedLiquid.getVolume());
+        responseDTO.setOriginalVolume(requestedLiquid.getOriginalVolume());
+        responseDTO.setActualVolume(requestedLiquid.getActualVolume());
         responseDTO.setBatch(requestedLiquid.getBatch());
 
         return responseDTO;
@@ -87,7 +90,8 @@ public class LiquidService {
         Liquid updatingLiquid = liquidDetails.get();
 
         updatingLiquid.setDescription(liquidDTO.getDescription());
-        updatingLiquid.setVolume(liquidDTO.getVolume());
+        updatingLiquid.setOriginalVolume(liquidDTO.getOriginalVolume());
+        updatingLiquid.setActualVolume(liquidDTO.getActualVolume());
         updatingLiquid.setOrigin(liquidDTO.getOrigin());
         updatingLiquid.setBatch(liquidDTO.getBatch());
 
@@ -98,7 +102,8 @@ public class LiquidService {
         responseDTO.setId(updatingLiquid.getId());
         responseDTO.setDescription(updatingLiquid.getDescription());
         responseDTO.setOrigin(updatingLiquid.getDescription());
-        responseDTO.setVolume(updatingLiquid.getVolume());
+        responseDTO.setOriginalVolume(updatingLiquid.getOriginalVolume());
+        responseDTO.setActualVolume(updatingLiquid.getActualVolume());
         responseDTO.setBatch(updatingLiquid.getBatch());
 
         return responseDTO;
