@@ -1,7 +1,5 @@
 package com.immd3v.limsManager.dto;
 
-import com.immd3v.limsManager.entity.Liquid;
-
 import java.time.LocalDateTime;
 
 public class AnalysisRequestDTO {
@@ -11,7 +9,9 @@ public class AnalysisRequestDTO {
     private String requestedBy;
     private LocalDateTime requestDate;
     private LocalDateTime completionDate;
-            //Analysis Protocol
+    //Analysis Protocol
+    //jackson no sabe como manejar palabras tan cortas como pH por lo que
+    //su camelCase la define como ph en respuestas. Entonces cambio en el frontend, mas fácil
     private Double pH;
     private Double turbidity;
 

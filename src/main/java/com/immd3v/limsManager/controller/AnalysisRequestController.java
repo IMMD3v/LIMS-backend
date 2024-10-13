@@ -1,6 +1,7 @@
 package com.immd3v.limsManager.controller;
 
 import com.immd3v.limsManager.dto.AnalysisRequestDTO;
+import com.immd3v.limsManager.dto.ContainerDTO;
 import com.immd3v.limsManager.service.AnalysisRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,4 +30,9 @@ public class AnalysisRequestController {
 
     @GetMapping("/details/{id}")
     public AnalysisRequestDTO details(@PathVariable int id) { return analysisRequestService.getOneById(id);}
+
+    @PutMapping("/update/{id}")
+    public AnalysisRequestDTO update(@PathVariable Integer id, @RequestBody AnalysisRequestDTO requestDTO) {
+        return analysisRequestService.update(id, requestDTO);
+    }
 }

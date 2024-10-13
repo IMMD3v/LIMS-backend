@@ -42,10 +42,11 @@ public class AnalysisRequestService {
 
     public String createOne(AnalysisRequestDTO analysisRequestDTO) {
         AnalysisRequest analysisRequest = new AnalysisRequest();
-
+        //request fields
         analysisRequest.setLiquid(liquidService.setLiquidType(analysisRequestDTO.getLiquid()));
-        analysisRequest.setStatus("created");
         analysisRequest.setRequestedBy(analysisRequestDTO.getRequestedBy());
+        //automatic fields
+        analysisRequest.setStatus("created");
         analysisRequest.setRequestDate(LocalDateTime.now());
         analysisRequest.setPH(null);
         analysisRequest.setTurbidity(null);
@@ -77,5 +78,31 @@ public class AnalysisRequestService {
         response.setTurbidity(requestedAnalysis.getTurbidity());
 
         return response;
+    }
+
+    public AnalysisRequestDTO update(Integer id, AnalysisRequestDTO requestDTO) {
+        Optional<AnalysisRequest> existingAnalysis = analysisRequestRepository.findById(id);
+
+        AnalysisRequest updatingAnalysis = existingAnalysis.get();
+
+        updatingAnalysis.setStatus(requestDTO.getStatus());
+        updatingAnalysis.setLiquid(liquidService.setLiquidType(requestDTO.getLiquid()));
+        updatingAnalysis.setRequestedBy(requestDTO.getRequestedBy());
+        updatingAnalysis.setRequestDate(requestDTO.getRequestDate());
+        updatingAnalysis.setCompletionDate(requestDTO.getCompletionDate());
+        updatingAnalysis.setPH(requestDTO.getPH());
+        updatingAnalysis.setTurbidity(requestDTO.getTurbidity());
+
+        analysisRequestRepository.save(updatingAnalysis);
+
+        AnalysisRequestDTO responseDTO = new AnalysisRequestDTO();
+        responseDTO.setStatus(updatingAnalysis.getStatus());
+        responseDTO.setLiquid(updatingAnalysis.getLiquid().getDescription());
+        responseDTO.setRequestedBy(updatingAnalysis.getRequestedBy());
+        responseDTO.setRequestDate(updatingAnalysis.getRequestDate());
+        responseDTO.setCompletionDate(updatingAnalysis.getCompletionDate());
+        responseDTO.setPH(updatingAnalysis.getPH());
+        responseDTO.setTurbidity(updatingAnalysis.getTurbidity());
+        return responseDTO;
     }
 }
