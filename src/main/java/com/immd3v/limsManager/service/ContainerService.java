@@ -2,6 +2,8 @@ package com.immd3v.limsManager.service;
 
 import com.immd3v.limsManager.dto.ContainerDTO;
 import com.immd3v.limsManager.entity.Container;
+import com.immd3v.limsManager.exception.GeneralExceptionResponse;
+import com.immd3v.limsManager.message.Message;
 import com.immd3v.limsManager.repository.ContainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,44 +16,93 @@ import java.util.stream.Collectors;
 public class ContainerService {
     @Autowired
     private ContainerRepository containerRepository;
+    @Autowired
+    private LiquidService liquidService;
 
     //CRUD methods
     public List<ContainerDTO> getContainers() {
-        //return the list of all
-        List<Container> containersList = containerRepository.findAll();
-        List<ContainerDTO> response = containersList.stream()
-                .map(container -> {
-                    ContainerDTO containerDTO = new ContainerDTO();
-                    containerDTO.setId(container.getId());
-                    containerDTO.setName(container.getName());
-                    containerDTO.setCapacity(container.getCapacity());
-                    containerDTO.setUsedCapacity(container.getUsedCapacity());
-                    containerDTO.setLiquidType(container.getLiquidType());
-                    containerDTO.setMaterial(container.getMaterial());
-                    containerDTO.setInUse(container.isInUse());
-                    return containerDTO;
-                })
-                .collect(Collectors.toList());
-        return response;
+        //try return the list of all
+        try {
+            List<Container> containersList = containerRepository.findAll();
+            if (containersList.isEmpty()) {
+                throw new GeneralExceptionResponse("resource not found!");
+            }
+            return containersList.stream()
+                    .map(container -> {
+                        ContainerDTO containerDTO = new ContainerDTO();
+                        containerDTO.setId(container.getId());
+                        containerDTO.setName(container.getName());
+                        containerDTO.setCapacity(container.getCapacity());
+                        containerDTO.setUsedCapacity(container.getUsedCapacity());
+                        // Verificar si el liquid no es null antes de asignar el liquidId
+                        if (container.getLiquid() != null) {
+                            containerDTO.setLiquidId(container.getLiquid().getId());
+                        } else {
+                            containerDTO.setLiquidId(0);
+                        }
+                        containerDTO.setMaterial(container.getMaterial());
+                        containerDTO.setInUse(container.isInUse());
+                        return containerDTO;
+                    })
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<ContainerDTO> getEmptyContainers() {
-        //return the list of all
-        List<Container> emptyContainerList = containerRepository.findByInUseFalse();
-        List<ContainerDTO> response = emptyContainerList.stream()
-                .map(container -> {
-                    ContainerDTO containerDTO = new ContainerDTO();
-                    containerDTO.setId(container.getId());
-                    containerDTO.setName(container.getName());
-                    containerDTO.setCapacity(container.getCapacity());
-                    containerDTO.setUsedCapacity(container.getUsedCapacity());
-                    containerDTO.setLiquidType(container.getLiquidType());
-                    containerDTO.setMaterial(container.getMaterial());
-                    containerDTO.setInUse(container.isInUse());
-                    return containerDTO;
-                })
-                .collect(Collectors.toList());
-        return response;
+        //try return the list of all
+        try {
+            List<Container> emptyContainerList = containerRepository.findByInUseFalse();
+            if (emptyContainerList.isEmpty()) {
+                throw new GeneralExceptionResponse("resource not found!");
+            }
+            return emptyContainerList.stream()
+                    .map(container -> {
+                        ContainerDTO containerDTO = new ContainerDTO();
+                        containerDTO.setId(container.getId());
+                        containerDTO.setName(container.getName());
+                        containerDTO.setCapacity(container.getCapacity());
+                        containerDTO.setUsedCapacity(container.getUsedCapacity());
+                        // Verificar si el liquid no es null antes de asignar el liquidId
+                        if (container.getLiquid() != null) {
+                            containerDTO.setLiquidId(container.getLiquid().getId());
+                        } else {
+                            containerDTO.setLiquidId(0);
+                        }
+                        containerDTO.setMaterial(container.getMaterial());
+                        containerDTO.setInUse(container.isInUse());
+                        return containerDTO;
+                    })
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<ContainerDTO> getUsedContainers() {
+        //try return the list of all
+        try {
+            List<Container> emptyContainerList = containerRepository.findByInUseTrue();
+            if (emptyContainerList.isEmpty()) {
+                throw new GeneralExceptionResponse("resource not found!");
+            }
+            return emptyContainerList.stream()
+                    .map(container -> {
+                        ContainerDTO containerDTO = new ContainerDTO();
+                        containerDTO.setId(container.getId());
+                        containerDTO.setName(container.getName());
+                        containerDTO.setCapacity(container.getCapacity());
+                        containerDTO.setUsedCapacity(container.getUsedCapacity());
+                        containerDTO.setLiquidId(container.getLiquid().getId());
+                        containerDTO.setMaterial(container.getMaterial());
+                        containerDTO.setInUse(container.isInUse());
+                        return containerDTO;
+                    })
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String saveNewContainer(ContainerDTO containerDTO) {
@@ -70,6 +121,11 @@ public class ContainerService {
     }
 
     public String deleteContainer(int id) {
+        Optional<Container> container = containerRepository.findById(id);
+        Container requestedElimination = container.get();
+        requestedElimination.setLiquid(null);
+        containerRepository.save(requestedElimination);
+
         containerRepository.deleteById(id);
         return "record deleted successfully!";
     }
@@ -82,7 +138,12 @@ public class ContainerService {
         updatingContainer.setCapacity(containerDTO.getCapacity());
         updatingContainer.setUsedCapacity(containerDTO.getUsedCapacity());
         updatingContainer.setName(containerDTO.getName());
-        updatingContainer.setLiquidType(containerDTO.getLiquidType());
+
+        if (containerDTO.getLiquidId() != 0) {
+            updatingContainer.setLiquid(liquidService.setLiquidType(containerDTO.getLiquidId()));
+        } else {
+            updatingContainer.setLiquid(null);
+        }
         updatingContainer.setMaterial(containerDTO.getMaterial());
         //is required in assignment cases
         updatingContainer.setInUse(containerDTO.isInUse());
@@ -94,7 +155,11 @@ public class ContainerService {
         responseDTO.setId(updatingContainer.getId());
         responseDTO.setName(updatingContainer.getName());
         responseDTO.setCapacity(updatingContainer.getCapacity());
-        responseDTO.setLiquidType(updatingContainer.getLiquidType());
+        if (updatingContainer.getLiquid() != null) {
+            responseDTO.setLiquidId(updatingContainer.getLiquid().getId());
+        } else {
+            containerDTO.setLiquidId(0);
+        }
         responseDTO.setMaterial(updatingContainer.getMaterial());
         return responseDTO;
     }
@@ -112,10 +177,24 @@ public class ContainerService {
         responseDTO.setName(requestedContainer.getName());
         responseDTO.setCapacity(requestedContainer.getCapacity());
         responseDTO.setUsedCapacity(requestedContainer.getUsedCapacity());
-        responseDTO.setLiquidType(requestedContainer.getLiquidType());
+        // Verificar si el liquid no es null antes de asignar el liquidId
+        if (requestedContainer.getLiquid() != null) {
+            responseDTO.setLiquidId(requestedContainer.getLiquid().getId());
+        } else {
+            responseDTO.setLiquidId(0);
+        }
         responseDTO.setMaterial(requestedContainer.getMaterial());
         responseDTO.setInUse(requestedContainer.isInUse());
 
         return responseDTO;
+    }
+
+    public Container setContainerType(Integer containerId) {
+        Container requestedContainer = containerRepository.findById(containerId).orElse(null);
+        if (requestedContainer == null) {
+            throw new RuntimeException();
+        } else {
+            return requestedContainer;
+        }
     }
 }

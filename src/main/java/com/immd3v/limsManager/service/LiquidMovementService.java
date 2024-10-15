@@ -32,9 +32,9 @@ public class LiquidMovementService {
 
     }
     public RemainVolumeDTO setLiquidToContainer(ContainerIdDTO containerIdDTO) {
-        ContainerDTO container = containerService.getOneById(containerIdDTO.getId());
+        ContainerDTO container = containerService.getOneById(containerIdDTO.getContainerId());
         if (container == null) {
-            throw new RuntimeException("Container not found with id " + containerIdDTO.getId());
+            throw new RuntimeException("Container requested not found");
         }
         if (container.isInUse()) {
             throw new IllegalStateException("Container is already in use.");
@@ -43,7 +43,7 @@ public class LiquidMovementService {
         double liquidVolume = liquid.getActualVolume();
 
         // Asignamos el tipo de líquido al contenedor
-        container.setLiquidType(liquid.getDescription());
+        container.setLiquidId(containerIdDTO.getLiquidId());
 
         // Si el volumen del líquido es mayor que la capacidad del contenedor
         if (liquidVolume >= container.getCapacity()) {
@@ -59,7 +59,7 @@ public class LiquidMovementService {
         }
         container.setInUse(true);
         //update state of container
-        containerService.updateContainer(containerIdDTO.getId(), container);
+        containerService.updateContainer(containerIdDTO.getContainerId(), container);
         //update state of liquid
         liquidService.update(liquid.getId(), liquid);
 

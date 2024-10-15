@@ -2,8 +2,11 @@ package com.immd3v.limsManager.controller;
 
 import com.immd3v.limsManager.dto.ContainerDTO;
 import com.immd3v.limsManager.entity.Container;
+import com.immd3v.limsManager.message.Message;
 import com.immd3v.limsManager.service.ContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,31 +19,52 @@ public class ContainerController {
     private ContainerService containerService;
 
     @GetMapping("/listAll")
-    public List<ContainerDTO> findAll() {
-        return containerService.getContainers();
+    public ResponseEntity<List<ContainerDTO>> findAll() {
+        List<ContainerDTO> response = containerService.getContainers();
+        return new ResponseEntity(response, HttpStatus.OK);
     }
     @GetMapping("/listAllEmpty")
-    public List<ContainerDTO> findAllEmpty() {
-        return containerService.getEmptyContainers();
+    public ResponseEntity<List<ContainerDTO>> findAllEmpty() {
+        List<ContainerDTO> response = containerService.getEmptyContainers();
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/listAllInUse")
+    public ResponseEntity<List<ContainerDTO>> findAllInUse() {
+        List<ContainerDTO>response = containerService.getUsedContainers();
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public String createOne(@RequestBody ContainerDTO container) {
-        return containerService.saveNewContainer(container);
+    public ResponseEntity<String> createOne(@RequestBody ContainerDTO container) {
+        String response = containerService.saveNewContainer(container);
+        return new ResponseEntity(new Message(response), HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
-    public ContainerDTO update(@PathVariable Integer id, @RequestBody ContainerDTO requestDTO) {
-        return containerService.updateContainer(id, requestDTO);
+    public ResponseEntity<ContainerDTO> update(@PathVariable Integer id, @RequestBody ContainerDTO requestDTO) {
+        if (id == null || id <= 0) {
+            return new ResponseEntity(new Message("invalid id request"), HttpStatus.BAD_REQUEST);
+        }
+        ContainerDTO response = containerService.updateContainer(id, requestDTO);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id) {
-        return containerService.deleteContainer(id);
+    public ResponseEntity<String> delete(@PathVariable Integer id) {
+        if (id == null || id <= 0) {
+            return new ResponseEntity(new Message("invalid id request"), HttpStatus.BAD_REQUEST);
+        }
+        String response = containerService.deleteContainer(id);
+        return new ResponseEntity(new Message(response), HttpStatus.OK);
     }
 
     @GetMapping("/details/{id}")
-    public ContainerDTO details(@PathVariable Integer id) {
-        return containerService.getOneById(id);
+    public ResponseEntity<ContainerDTO> details(@PathVariable Integer id) {
+        if (id == null || id <= 0) {
+            return new ResponseEntity(new Message("invalid id request"), HttpStatus.BAD_REQUEST);
+        }
+        ContainerDTO response = containerService.getOneById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

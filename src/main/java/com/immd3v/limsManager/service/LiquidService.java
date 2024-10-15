@@ -110,8 +110,8 @@ public class LiquidService {
 
     }
 
-    public Liquid setLiquidType(String description) {
-        Liquid requestedLiquid = liquidRepository.findByDescription(description).orElse(null);
+    public Liquid setLiquidType(Integer liquidId) {
+        Liquid requestedLiquid = liquidRepository.findById(liquidId).orElse(null);
         if (requestedLiquid == null) {
             throw new RuntimeException();
         } else {

@@ -11,7 +11,9 @@ public class Container {
     private String name;
     private Double capacity;
     private Double usedCapacity;
-    private String liquidType;
+    @ManyToOne
+    @JoinColumn(name = "liquid_id")
+    private Liquid liquid;
     private boolean inUse;
     private String material;
     //another fields
@@ -22,14 +24,14 @@ public class Container {
             String name,
             Double capacity,
             Double usedCapacity,
-            String liquidType,
+            Liquid liquid,
             boolean inUse,
             String material
     ) {
         this.name = name;
         this.capacity = capacity;
         this.usedCapacity = usedCapacity;
-        this.liquidType = liquidType;
+        this.liquid = liquid;
         this.inUse = inUse;
         this.material = material;
     }
@@ -42,8 +44,8 @@ public class Container {
     public void setCapacity(Double capacity) { this.capacity = capacity;}
     public Double getUsedCapacity() { return this.usedCapacity;}
     public void setUsedCapacity(Double usedCapacity) { this.usedCapacity = usedCapacity;}
-    public String getLiquidType() { return this.liquidType;}
-    public void setLiquidType(String liquidType) { this.liquidType = liquidType;}
+    public Liquid getLiquid() { return this.liquid;}
+    public void setLiquid(Liquid liquid) { this.liquid = liquid;}
     public boolean isInUse() { return this.inUse;}
     public void setInUse(boolean inUse) { this.inUse = inUse;}
     public String getMaterial() { return this.material;}
