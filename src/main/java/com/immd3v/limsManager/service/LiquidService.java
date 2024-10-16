@@ -3,6 +3,7 @@ package com.immd3v.limsManager.service;
 import com.immd3v.limsManager.dto.LiquidDTO;
 import com.immd3v.limsManager.entity.AnalysisRequest;
 import com.immd3v.limsManager.entity.Liquid;
+import com.immd3v.limsManager.exception.GeneralExceptionResponse;
 import com.immd3v.limsManager.repository.AnalysisRequestRepository;
 import com.immd3v.limsManager.repository.LiquidRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +21,26 @@ public class LiquidService {
     private AnalysisRequestRepository analysisRequestRepository;
 
     public List<LiquidDTO> listAll() {
-        List<Liquid> liquidList = liquidRepository.findAll();
-        List<LiquidDTO> response = liquidList.stream()
-                .map(liquid -> {
-                    LiquidDTO liquidDTO = new LiquidDTO();
-                    liquidDTO.setId(liquid.getId());
-                    liquidDTO.setDescription(liquid.getDescription());
-                    liquidDTO.setOrigin(liquid.getOrigin());
-                    liquidDTO.setOriginalVolume(liquid.getOriginalVolume());
-                    liquidDTO.setActualVolume(liquid.getActualVolume());
-                    liquidDTO.setBatch(liquid.getBatch());
-                    return liquidDTO;
-                })
-                .collect(Collectors.toList());
-        return response;
+        try {
+            List<Liquid> liquidList = liquidRepository.findAll();
+            if (liquidList.isEmpty()) {
+                throw new GeneralExceptionResponse("resource not found!");
+            }
+            return liquidList.stream()
+                    .map(liquid -> {
+                        LiquidDTO liquidDTO = new LiquidDTO();
+                        liquidDTO.setId(liquid.getId());
+                        liquidDTO.setDescription(liquid.getDescription());
+                        liquidDTO.setOrigin(liquid.getOrigin());
+                        liquidDTO.setOriginalVolume(liquid.getOriginalVolume());
+                        liquidDTO.setActualVolume(liquid.getActualVolume());
+                        liquidDTO.setBatch(liquid.getBatch());
+                        return liquidDTO;
+                    })
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String saveLiquid(LiquidDTO liquidDTO) {
@@ -111,12 +118,11 @@ public class LiquidService {
     }
 
     public Liquid setLiquidType(Integer liquidId) {
-        Liquid requestedLiquid = liquidRepository.findById(liquidId).orElse(null);
-        if (requestedLiquid == null) {
-            throw new RuntimeException();
-        } else {
+            Liquid requestedLiquid = liquidRepository.findById(liquidId).orElse(null);
+            if (requestedLiquid == null) {
+                throw new RuntimeException();
+            }
             return requestedLiquid;
-        }
     }
 
 }

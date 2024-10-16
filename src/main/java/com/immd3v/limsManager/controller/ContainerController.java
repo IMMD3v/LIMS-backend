@@ -1,7 +1,6 @@
 package com.immd3v.limsManager.controller;
 
 import com.immd3v.limsManager.dto.ContainerDTO;
-import com.immd3v.limsManager.entity.Container;
 import com.immd3v.limsManager.message.Message;
 import com.immd3v.limsManager.service.ContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
